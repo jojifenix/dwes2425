@@ -1,0 +1,15 @@
+123|pepe
+pepe@hola.com
+ti|1|8.5K
+232|ana
+ana@adios.com
+ti|2|10.0K
+043|juan
+juan@como.es
+ventas|2|5,9K
+234|ana
+ana@madrid.org
+adm|1|7.1K
+765|luis
+luis@hola.es
+atc|2|6.0K

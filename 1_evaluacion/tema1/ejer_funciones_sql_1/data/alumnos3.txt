@@ -1,0 +1,52 @@
+3345
+Juan | Perez | Rodriguez
+19-04-2000
+DAM
+4567
+Luis | Garcia | Carrion
+21-03-1998
+DAW
+1123
+Ana Isabel | Lopez | Lopez
+21-12-1999
+DAM
+2345
+Maira | Marin | Lopez
+01-05-1999
+DAM
+2346
+Pepe | Perez de Marin | Lopez
+15-05-1999
+DAM
+2347
+Oscar | Martinez | Lopez
+01-08-1999
+DAW
+2348
+Juan | Marin | Garcia
+12-05-1999
+DAW
+2349
+Pepa | Garcia | Lopez
+01-05-2000
+DAM
+2350
+Pepe | Martinez | Lopez
+01-03-1999
+DAW
+2351
+Pedro | Vazquez de Mella | Martin
+16-03-1999
+DAM
+2352
+Ana | Garcia | Martin
+16-01-2020
+DAW
+2353
+Nuño | Nuñez | Garcia
+20-01-2001
+DAM
+2354
+Nuria | Vazquez | Lopez
+01-12-2000
+DAW

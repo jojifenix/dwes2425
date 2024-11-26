@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--Ejercicio: Cambio de monedas V1
+
+Crear un formulario con los siguientes elementos:
+
+    - Un campo "cant" para introducir una cantidad de dinero( hasta 5000) en euros
+    - Una lista desplegable con varias monedas
+    - Un botón con el texto "CAMBIAR"
+    
+Al pulsar el botón , se mostrará un mensaje con el cambio de moneda
+
+ej: " 3000 euros equivalen 3423,54 dólares"
+
+VALIDAR que la cantidad sea un número no negativo
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formulario</title>
+</head>
+<body>
+
+    <h2>Formulario de monedas</h2>
+
+    <form action="moneda_mejorada_funciones.php" method="POST"> 
+        <label>Cantidad de dinero:</label>
+        <input type="number" name="cant" min=0 max=50000><br><br>
+
+        <label>Selecciona una opción:</label>
+            <select name="moneda">
+                <option value="dolar">dolares</option>
+                <option value="yen">yenes</option>
+                <option value="yuan">yuanes</option>
+                <option value="pesos">pesos argentinos</option>
+                <br><br>
+
+
+        <!-- Mis datos:
+         
+        <label>Selecciona una opción:</label>
+            <select name="monedas">
+                <option value="Dólares">Dólares</option>
+                <option value="Yenes">Yenes</option>
+                <option value="Rupias">Rupias</option>
+                <br><br>
+        -->
+        <input type="submit" name= "CAMBIAR">
+    </form>
+<!--Podemos ver como en pantalla el resultado del formulario nos muestra el array $_POST con las claves
+de CANT (que viene del atributo name aqui) y la de DÓLARES/YENES/RUPIAS ( del atributo value en option dentro del 
+select).No sale en las claves el titulo que nos da el formulario.html eso solo es para el formulario base 
+no saldrá en el array almacenado en $_POST-->
+</body>
+</html>
+

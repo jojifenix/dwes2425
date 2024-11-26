@@ -1,0 +1,6 @@
+nia, nombre, ciclo, curso, inicial
+1, pepe, daw, 1, J
+2, ana, dam, 2, A
+3, juan, dam, 2, B
+4, ana, daw, 1, L
+5, luis, daw, 2, M

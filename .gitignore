@@ -1,0 +1,59 @@
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de configuración y entornos
+.env
+*.env.local
+*.env.testing
+*.env.development
+*.env.production
+.phpunit.result.cache
+
+# Ignorar dependencias de Composer (PHP)
+vendor/
+
+# Ignorar archivos de caché de PHP
+*.log
+*.cache
+*.tmp
+*.bak
+
+# Ignorar configuración y datos temporales de PHPStorm
+.idea/
+.vscode/
+
+# Ignorar archivos de sesiones y carga de PHP
+sessions/
+uploads/
+
+# Ignorar logs y reportes de errores
+error_log
+php_errors.log
+
+# Ignorar archivos de Composer y depuración
+composer.lock
+*.phar
+
+# Ignorar archivos de depuración y cobertura de PHPUnit
+coverage/
+.phpunit.result.cache
+tests/output/
+
+# Ignorar archivos de almacenamiento de Laravel (si usas este framework)
+storage/
+bootstrap/cache/
+
+# Ignorar archivos relacionados con Docker (si usas Docker)
+docker-compose.yml
+docker-compose.override.yml
+*.dockerfile
+
+# Ignorar archivos temporales del sistema operativo Windows
+*.tmp
+*.temp
+desktop.ini
+
+# Ignorar configuraciones locales específicas de desarrollo
+*.local.php
+*.local.yml
