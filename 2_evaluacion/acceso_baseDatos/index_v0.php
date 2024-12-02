@@ -1,9 +1,13 @@
-<!-- BIBLIOTECA VERSIÓN 1
+<!-- BIBLIOTECA VERSIÓN 0
      Características de esta versión:
-       - Código monolítico (sin arquitectura MVC)
+       - Código monolítico (sin arquitectura MVC)  
        - Sin seguridad
        - Sin sesiones ni control de acceso
        - Sin reutilización de código
+
+
+
+Acordarnos de cambiar las referencias a index-php con <a href='".$_SERVER['PHP_SELF']."'>
 -->
 <!DOCTYPE html>
 <html lang="es">
@@ -29,10 +33,7 @@
         private $db = null;     // Conexión con la base de datos
 
         public function __construct() {
-            $this->db = new mysqli("localhost", "root", "root", "books"); /*host , usuario, paswd y nombre base datos
-            ponemos localhost:3309 por ejemplo para decir el puerto donde va si no ponemos nada seria el predeterminado 
-            de mysql 3306 , si queremos cambiar el puerto nos vamos a xampp y en config en mysql cambiamos el archivo y 
-            ponemosel puerto que queremos*/
+            $this->db = new mysqli("servidor-de-base-de-datos", "usuario", "password", "nombre-base-de-datos");
         }
 
 
@@ -46,8 +47,7 @@
                                         INNER JOIN personas ON escriben.idPersona = personas.idPersona
                                         ORDER BY libros.titulo")) {
 
-                // La consulta se ha ejecutado con éxito(devuelve un cursor).Iteramos con él. Vamos a ver si contiene registros
-               print_r($result);//nos imprime la estructura de datos del cursor
+                // La consulta se ha ejecutado con éxito. Vamos a ver si contiene registros
                 if ($result->num_rows != 0) {
                     // La consulta ha devuelto registros: vamos a mostrarlos
 
