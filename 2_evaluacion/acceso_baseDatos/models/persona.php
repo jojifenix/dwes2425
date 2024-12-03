@@ -3,19 +3,19 @@
 -->
 
 <?php
-    class Autores {
+    class Persona{
        
         public static function getAll() { 
             $db = new mysqli("localhost:3306", "root", "root", "books");
             $result = $db->query("SELECT * FROM personas ORDER BY apellido");          
                 if ($result->num_rows != 0) {
-                    $autores=[];
+                    $items=[];
                     while ($fila = $result->fetch_object()) {
-                        $autores[]=$fila;
+                        $items[]=$fila;
                     }//while
                 }//if
            
             $db->close();
-            return $autores;
+            return $items;
         }//getAll
     }//autores

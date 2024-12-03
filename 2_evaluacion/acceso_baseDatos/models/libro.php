@@ -3,8 +3,9 @@
      Extraer vista
  -->  
 <?php
-    class Libros {
+    class Libro {
        
+    
         public static function getAll() { //Es importante que sea estático ??
             $db = new mysqli("localhost:3306", "root", "root", "books");
             // Buscamos todos los libros de la biblioteca
@@ -13,20 +14,26 @@
                                         INNER JOIN escriben ON libros.idLibro = escriben.idLibro
                                         INNER JOIN personas ON escriben.idPersona = personas.idPersona
                                         ORDER BY libros.titulo");
+            $items=[];
 
                 // La consulta se ha ejecutado con éxito se deuvelve un cursor. Vamos a ver si contiene registros
                 if ($result->num_rows != 0) {
                 // La consulta ha devuelto registros: vamos a mostrarlos
-                    $Libros=[];
+                   
                     while ($fila = $result->fetch_object()) {
-                        $Libros[]=$fila;
+                        $items[]=$fila;
                     }//while
                 }//if
            
 
             $db->close();
-            return $Libros;
+            return $items;
         }//getAll
+
+
+        public static function save(){
+            
+        }
     }//Libro
 
 ?>
