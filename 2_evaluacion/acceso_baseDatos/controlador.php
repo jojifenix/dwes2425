@@ -34,9 +34,20 @@
     class Biblioteca{
         private $db=null;
 
-        public function __construct(){
-            $this->db = new mysqli();
+        public function __construct(){}
+
+        public function personaForm(){
+            View::render('persona/save'); //submit action = personaSave
         }
+        public function personaSave(){
+           $persona=$_REQUEST; 
+           unset($persona['action']);
+           Persona::save($persona);
+           $this->libroForm();
+        }
+
+          
+        
 
         public function libroAll(){
             $data['libro_all']=Libro::getAll();
@@ -49,17 +60,14 @@
         }
 
         public function libroSave(){
-            $libro=$_REQUEST;
-            $autores=$_REQUEST['autor'];//array PQ son varios autores
+            $libro=$_REQUEST; //como $_REQUEST es variable global funciona dentro del save o fuera, aunque seria mas correcto aquí en nuestro caso, el modelo no deberia saber nada de la petición mejor el controlador. En esta request se guardan datos introducidos en el formulario
             unset($libro['action']);
-            unset($libro['autor']);
-           // print_r($_REQUEST);
            Libro::save($libro);
            //mostrar la lista de libros
            $this->libroAll();
 
-        } 
-    }
+        } }
+    
     ?>
 </body>
 </html>

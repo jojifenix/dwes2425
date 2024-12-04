@@ -18,4 +18,25 @@
             $db->close();
             return $items;
         }//getAll
-    }//autores
+
+
+
+        public static function save($item){
+            $db=new mysqli("localhost:3306", "root", "root", "books");
+            $q="INSERT INTO personas (nombre,apellido,pais) 
+                  VALUES ('"
+                            .$item['nombre']."','"
+                            .$item['apellido']."','"
+                            .$item['pais']."')";
+        
+            $result=$db->query($q);
+            if($result) $data['result']="Insercación realizada";
+                else $data['error']="Error en la insercion"; 
+                
+
+
+            
+
+            }
+        }
+
