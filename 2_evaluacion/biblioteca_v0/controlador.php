@@ -66,7 +66,10 @@
            //mostrar la lista de libros
            $this->libroAll();
 
-        } }
+        } 
+
+        public function libroUpdate(){}
+    }
     
     ?>
 </body>

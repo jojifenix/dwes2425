@@ -28,17 +28,48 @@
 
         <?php
         //lo que exige iterar un arry usamos php 
+
+
+        
+        $actual=NULL;//el primer libro debe tener fila nueva si o si
+        $autores="";
+        
+
              foreach ($data['libro_all'] as $libro){
+                if($libro->idLibro!=$actual->idLibro){//nuevo libro
                 echo "<tr>
-                         <td>.$libro->titulo.</td>
-                         <td>.$libro->genero.</td>
-                         <td>.$libro->numPaginas.</td>
-                         <td>.$libro->nombre.</td>
-                         <td>.$libro->apellido.</td>
-                         <td><a href='".$_SERVER['PHP_SELF']."'?action=libroSave&idLibto=".$libro->idLibro."'>Modificar</a></td>;
-                         <td><a href='".$_SERVER['PHP_SELF']."'?action=libroDelete&idLibro=".$libro->idLibro."'>Borrar</a></td>;
-                         </tr>";}
+                         <td>".$actual->idLibro."</td>
+                         <td>".$actual->titulo."</td>
+                         <td>".$actual->genero."</td>
+                         <td>".$actual->numPaginas."</td>
+                         <td>".$autores."</td>
+                         <td><a href='".$_SERVER['PHP_SELF']."?action=libroSave&idLibto=".$actual->idLibro."'>Modificar</a></td>
+                         <td><a href='".$_SERVER['PHP_SELF']."?action=libroDelete&idLibro=".$actual->idLibro."'>Borrar</a></td>
+                         </tr>";
+
+                         $actual=$libro;
+                         $autores="";
+                         
+                }
+
+                //autor con formato apellido,nombre
+                //en una misma celda, cada autor en un alínea diferente
+
+                if(!$autores) echo "<td>"; //inicio casilla
+                //acumulo autor
+
+                $autores.=$libro->apellido.",".$libro->nombre;
+
+                        
+            }   
+        
+        
+        
+        
         ?>
+
+
+
 
         </tr>
         </table>
