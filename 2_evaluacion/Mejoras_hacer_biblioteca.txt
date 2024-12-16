@@ -1,0 +1,25 @@
+                                    ADMINSITRACIÓN BIBLIOTECA
+
+
+//implementar hacer arrays en vez de todo el rato variables sueltas
+
+
+$params=array_values($item)
+$db->executequery($q,$params)
+
+//si algo se compila en cada función en un mismo documento(libro.php) guardamos el resultado de la compilacion en una variable
+y la usamos en cad afución ya compilada
+
+
+$q="DELETE FROM libros WHERE idLibro = ?"
+$db->execute_query($q,[$idLibro])
+
+
+//Siempre que tengas que repetir datos todo el tiempo algo va mal hay que intentar que no
+//Falta implementar el FILTER 
+
+----------------------------------------------------------------------------------------
+
+                            USUARIO BILBIOTECA
+
+Acordarnos de las formas normales de una base de datos (importante para hacer una)

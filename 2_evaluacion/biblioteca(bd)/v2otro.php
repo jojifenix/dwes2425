@@ -100,7 +100,12 @@
             $this->libroAll();
         }
 
+        public function loginForm()
+        {
+            View::render('login'); // -> manda a userControl
+        }
 
+        public function userControl(){}
 
         public function personaForm()
         {

@@ -179,6 +179,7 @@ class Libro
         try {
             $db = new mysqli("localhost", "root", "root", "books");
             $db->query("DELETE FROM libros WHERE idLibro = '$idLibro'");
+            //si algo se compila en cada función en un mismo documento(libro.php) guardamos el resultado de la compilacion en una variable y la usamos en cada afución ya compilada                    $q="DELETE FROM libros WHERE idLibro = ?"                                                   $db->execute_query($q,[$idLibro])                FALTA IMPLEMENTAR ÉSTO
         } catch (mysqli_sql_exception $e) {
             echo "Error al borrar el libro: " . $e->getMessage();
         } finally {
