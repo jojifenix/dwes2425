@@ -1,32 +1,38 @@
-
 <?php
-/*
-extraer todo lo de vista. Vamos a hacer un modelo por cada entidad y una vista por cada caso de uso
-¿y cada vista en una clase diferente?
-*/
 require_once("dao.php");
-class Persona{
+class User{
+
     private $db;
-
-
+    
     function __construct(){
         $this->db= new Db();
-    }
-    // private $idLibro;
-    // private $titulo;
-    // private $genero;
-    // private $numPaginas;
-    // private $nombre;
+    } 
 
-    // --------------------------------- MOSTRAR LISTA DE AUTORES ----------------------------------------
+    function validate($data){
+        //comprobar en la BD si existe ese user con esa pwd
+        $q= "SELECT iduser FROM users WHERE user='".$data['user']."'AND pass='".$data['pass']."'";
+        $result=$this->db->myQuery($q);
+        if(!empty($result)) $iduser=$result[0]->iduser;//datos correctos
+        else $iduser=0; // user y/o pass incorrectos
+        return $iduser;
+    }//validate
+
+    public function getRoles($id){
+        $rr=[];
+        if($id==1) $rr['adm']=1;
+        $rr['cli']=1;//para todos
+        return $rr;
+    
+    
+    }//getRoles
+
+
+    // --------------------------------- Obtener listado ----------------------------------------
     public function getAll(){
-        $q= "SELECT * FROM personas ORDER BY apellido";
-        $libro=$this->db->myQuery($q);
-        return $libro;
-
-    }//getall
-
-
+        $q = "SELECT * FROM users ORDER BY user";
+        $personas=$this->db->myQuery($q);
+        return $personas;
+    }
 
     // --------------------------------- FORMULARIO ALTA DE LIBROS ----------------------------------------
 
@@ -34,7 +40,7 @@ class Persona{
 
     // --------------------------------- FORMULARIO ALTA DE AUTORES ----------------------------------------
 
-    public function save($p) {
+    public  function save($p) {
         $db = new mysqli("localhost", "root", "root", "books");
 
         $q = "INSERT INTO personas (nombre, apellido, pais) VALUES ('$p[nombre]', '$p[apellido]', '$p[pais]')";

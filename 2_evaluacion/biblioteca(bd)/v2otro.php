@@ -26,6 +26,7 @@
 
     include 'models/libro.php';
     include 'models/persona.php';
+    include 'models/user.php';
     include 'view.php';
 
     // Miramos el valor de la variable "action", si existe. Si no, le asignamos una acción por defecto
@@ -57,11 +58,24 @@
         // }
 
         //No hace falta conectarse aqui
+        private $db=null;
+        private $libro, $persona, $user;
+        public function __construct(){
+
+                $this->libro= new libro();
+                $this->persona= new persona();
+                $this->user= new user();
+
+        }
+
+
+
+
 
 
         public function libroAll()
         {
-            $data['libro_all'] = Libro::getAll();
+            $data['libro_all'] = $this->libro->getAll();
             View::render('libro/all', $data);
         }
 
@@ -72,7 +86,7 @@
             if (isset($_REQUEST['idLibro'])) {
                 $data['libroID'] = $_REQUEST['idLibro'];
             }
-            $data['persona_all'] = Persona::getAll();
+            $data['persona_all'] = $this->persona->getAll();
             View::render('libro/save', $data);
         }
 
@@ -87,7 +101,7 @@
             // unset($libro['autor']);
             print_r($libro);
             // Libro::save($libro, $autores);
-            Libro::save($libro);
+            $this->libro->save($libro);
             // View::render('libro/all');
             $this->libroAll();
         }
@@ -96,7 +110,7 @@
         {
             $libro = $_REQUEST;
             unset($libro['action']);
-            Libro::update($libro);
+            $this->libro->update($libro);
             $this->libroAll();
         }
 
@@ -105,8 +119,33 @@
             View::render('login'); // -> manda a userControl
         }
 
-        public function userControl(){}
+        public function userValidate(){
+            //recoge los datos del form y comprobar si existe el usuario y con qué roles
+            $data['login']=$_REQUEST;
+            $iduser=$this->user->validate($data['login']);
+            if($iduser){//validado
+            //pedir el rol del usuario
+            $roles=$this->user->getRoles($iduser);
+            //cargar en la sesión id, rol y preferencias si las hay
+            session_start();
+            $_SESSION['iduser']=$iduser;
+            if(isset($roles['adm']))$_SESSION['adm']= $iduser;
+            //mostrar vista principal correspondiente a ese rol
+            print_r($_SESSION); echo"</br";
+            $this->libroAll();
+            }else{
+                $this->loginForm();
+                echo "Datos incorrectos.Intente idenfiticarse otra vez";
+               
+            }
+        
+           
+        }//userValidate
 
+        public function logOut(){
+            session_destroy();
+           
+        }
         public function personaForm()
         {
             View::render('persona/save'); // -> manda a personaSave
@@ -116,7 +155,7 @@
         {
             $persona = $_REQUEST;
             unset($persona['action']);
-            Persona::save($persona);
+            $this->persona->save($persona);
             unset($persona['nombre']);
             unset($persona['apellido']);
             unset($persona['pais']);
@@ -134,7 +173,7 @@
 
         public function libroDelete()
         {
-            Libro::delete($_REQUEST['idLibro']);
+            $this->libro->delete($_REQUEST['idLibro']);
             $this->libroAll();
         }
         // --------------------------------- BORRAR LIBROS ----------------------------------------

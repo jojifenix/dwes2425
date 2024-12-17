@@ -29,7 +29,7 @@ foreach ($data['libro_all'] as $libro) {
                 echo"<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroForm&idLibro=" . $actual . "'>Modificar</a></td>
                      <td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroDelete&idLibro=" . $actual . "'>Borrar</a></td>
                      </tr>";
-            }//if isset rol tambien ponerlo en el parrafo despues de table
+            }//if isset rol tambien ponerlo en el parrafo despues de </table>
         }
         $actual = $libro->idLibro;
         $titulo = $libro->titulo;

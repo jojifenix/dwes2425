@@ -7,9 +7,14 @@ extraer todo lo de vista. Vamos a hacer un modelo por cada entidad y una vista p
 
 //habilitar las excepciones en mysqli para usar try catch
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+require_once("dao.php");
 
-class Libro
-{
+class Libro{
+    private $db;
+
+    function __construct(){
+        $this->db= new Db();
+    }
 
     // REVISAR SI METER PAIS TMBN
 
@@ -19,13 +24,9 @@ class Libro
     // private $numPaginas;
     // private $nombre;
 
-    // --------------------------------- MOSTRAR LISTA DE LIBROS ----------------------------------------
-    public static function getAll()
-    {
-        try {
-            $db = new mysqli("localhost", "root", "root", "books");
-
-            $result = $db->query("SELECT 
+    // --------------------------------- LISTA DE LIBROS ----------------------------------------
+    public function getAll(){
+            $q= "SELECT 
                                     titulo,genero,numPaginas,ano,
                                     libros.pais as pais,
                                     escriben.idLibro as idLibro,
@@ -33,35 +34,14 @@ class Libro
                                     apellido,nombre
                                     LEFT JOIN escriben ON libros.idLibro = escriben.idLibro
                                     LEFT JOIN personas ON escriben.idPersona = personas.idPersona
-                                    ORDER BY libros.idLibro, libros.titulo");
-            //los libros que no tienen entrada en escriben no aparecen
-
-            if ($result->num_rows != 0) {
-
-
-
-                $libro = [];
-
-                while ($fila = $result->fetch_object()) {
-                    $libro[] = $fila;
-                }
-            }
-            // $db->close();
+                                    ORDER BY libros.idLibro, libros.titulo";
+            $libro=$this->db->myQuery($q);
             return $libro;
-        } catch (mysqli_sql_exception $e) {
-            echo "Error al buscar el libro: " . $e->getMessage();
-        } finally {
-            $result->close();//liberar memoria
-            $db->close();
-        }
-    }
-
-
+    }//get all
 
     // --------------------------------- FORMULARIO ALTA DE LIBROS ----------------------------------------
 
-    public static function save($libro)
-    {
+    public function save($libro){
 
         $autores = $libro['autor']; //es un array pq son varios
         unset($libro['autor']);
@@ -133,8 +113,7 @@ class Libro
         }
     }
 
-    public static function get($busqueda)
-    {
+    public function get($busqueda){
         try {
 
 
@@ -174,8 +153,7 @@ class Libro
         }
     }
 
-    public static function delete($idLibro)
-    {
+    public function delete($idLibro){
         try {
             $db = new mysqli("localhost", "root", "root", "books");
             $db->query("DELETE FROM libros WHERE idLibro = '$idLibro'");
@@ -187,8 +165,7 @@ class Libro
         }
     }
 
-    public static function update($libro)
-    {
+    public function update($libro){
         
 
         try {
