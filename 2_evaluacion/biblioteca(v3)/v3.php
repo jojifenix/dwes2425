@@ -1,42 +1,14 @@
-<!-- BIBLIOTECA VERSIÓN 1
-     Características de esta versión:
-       - Código monolítico (sin arquitectura MVC)
-       - Sin seguridad
-       - Sin sesiones ni control de acceso
-       - Sin reutilización de código
--->
-<!DOCTYPE html>
-<html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Biblioteca</title>
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-
-<body>
     <?php
-
-    /*
-    Para el control de la app usamos 3 variables:
-    $action: siguiente método a ejecutar
-    $view: siguiente vista a renderizar
-    $data: datos que se pasan a la vista
-    */
-
     include 'models/libro.php';
     include 'models/persona.php';
     include 'models/user.php';
     include 'view.php';
 
-    // Miramos el valor de la variable "action", si existe. Si no, le asignamos una acción por defecto
-
-
-
     if (isset($_REQUEST["action"])) {
         $action = $_REQUEST["action"];
     } else {
-        $action = "libroAll";  // Acción por defecto
+        $action = "libroAll";
     }
 
     print_r($_REQUEST);
@@ -44,42 +16,81 @@
     print_r($action);
     echo "<br>";
 
-    // Creamos un objeto de tipo Biblioteca y llamamos al método $action()
+    
     $biblio = new Biblioteca();
     $biblio->$action();
 
+
     class Biblioteca
     {
-        // private $db = null;     // Conexión con la base de datos
-
-        // public function __construct()
-        // {
-        //     $this->db = new mysqli("localhost:3306", "root", "root", "books"); //si en host no ponemos puerto, por defecto es 3306
-        // }
-
-        //No hace falta conectarse aqui
-        private $db=null;
+        private $db = null;
         private $libro, $persona, $user;
-        public function __construct(){
 
-                $this->libro= new libro();
-                $this->persona= new persona();
-                $this->user= new user();
-
+        public function __construct()
+        {
+            $this->libro = new Libro();
+            $this->persona = new Persona();
+            $this->user = new User();
         }
 
+        public function adminAll()
+        {
+            
+            View::render('admin');
+        }
 
+        public function logOut() {
+            session_start();
+            session_destroy();
+            header("location:".$_SERVER['PHP_SELF']);
+            //al cargar la página sin action, muestra la vista ppal
+        }
 
+        public function loginForm()
+        {
+            // include "views/nav.php";
+            View::render('login');
+            // include "views/footer.php";
+        }
 
+        public function validate()
+        {
+            //recoger los datos del form y comprobar si existe user, pwd y con qué rol
+            $data['login'] = $_REQUEST;
+            $iduser = $this->user->validate($data['login']);
 
+            // $this->user->validate($data['login']);
+            if ($iduser) { 
+         
+
+                //pedir el rol del usuario
+                //mostrar la vista principal de ese rol
+                //cargar en la sesion id, rol y preferencias
+
+                $roles = $this->user->getRoles($iduser);
+                session_start();
+                $_SESSION['iduser'] = $iduser;
+                if(isset($roles['adm'])) {
+                    $_SESSION['adm'] = $iduser;//no escribo cli en la sesión
+                    $this->adminAll();
+                   
+                }else $this->libroAll();
+
+            } else {
+                $this->loginForm();
+                echo "Datos incorrectos. Inténtelo de nuevo";
+                //se podria meter una vista de error, de forma que se llame con:
+                //View::render('error', $data); --> "No hay datos con ese correo", o "La contraseña no es correcta", o lo que sea
+            }
+        }
 
         public function libroAll()
         {
+            // include "views/nav.php";
             $data['libro_all'] = $this->libro->getAll();
             View::render('libro/all', $data);
+            // include "views/footer.php";
         }
-
-        // --------------------------------- FORMULARIO ALTA DE LIBROS ----------------------------------------
 
         public function libroForm()
         {
@@ -90,19 +101,13 @@
             View::render('libro/save', $data);
         }
 
-        // --------------------------------- INSERTAR LIBROS ----------------------------------------
-
         public function libroSave()
         {
 
-            $libro = $_REQUEST; //datos del formulario
-            // $autores=$_REQUEST['autor'];
+            $libro = $_REQUEST;
             unset($libro['action']);
-            // unset($libro['autor']);
             print_r($libro);
-            // Libro::save($libro, $autores);
             $this->libro->save($libro);
-            // View::render('libro/all');
             $this->libroAll();
         }
 
@@ -114,41 +119,9 @@
             $this->libroAll();
         }
 
-        public function loginForm()
-        {
-            View::render('login'); // -> manda a userControl
-        }
-
-        public function userValidate(){
-            //recoge los datos del form y comprobar si existe el usuario y con qué roles
-            $data['login']=$_REQUEST;
-            $iduser=$this->user->validate($data['login']);
-            if($iduser){//validado
-            //pedir el rol del usuario
-            $roles=$this->user->getRoles($iduser);
-            //cargar en la sesión id, rol y preferencias si las hay
-            session_start();
-            $_SESSION['iduser']=$iduser;
-            if(isset($roles['adm']))$_SESSION['adm']= $iduser;
-            //mostrar vista principal correspondiente a ese rol
-            print_r($_SESSION); echo"</br";
-            $this->libroAll();
-            }else{
-                $this->loginForm();
-                echo "Datos incorrectos.Intente idenfiticarse otra vez";
-               
-            }
-        
-           
-        }//userValidate
-
-        public function logOut(){
-            session_destroy();
-           
-        }
         public function personaForm()
         {
-            View::render('persona/save'); // -> manda a personaSave
+            View::render('persona/save'); // 
         }
 
         public function personaSave()
@@ -162,39 +135,18 @@
             $this->libroForm();
         }
 
-
         public function libroGet()
         {
-            $data['libro_all'] = Libro::get($_REQUEST['textoBusqueda']);
+            $data['libro_all'] = $this->libro->get($_REQUEST['textoBusqueda']);
             View::render('libro/all', $data);
             echo "<p><a href='" . htmlspecialchars($_SERVER['PHP_SELF']) . "'>Resetear búsqueda</a></p>";
         }
-
 
         public function libroDelete()
         {
             $this->libro->delete($_REQUEST['idLibro']);
             $this->libroAll();
         }
-        // --------------------------------- BORRAR LIBROS ----------------------------------------
-        // public function borrarLibro()
-        // {
-        //     echo "<h1>Borrar libros</h1>";
-
-        //     // Recuperamos el id del libro y lanzamos el DELETE contra la BD
-        //     $idLibro = $_REQUEST["idLibro"];
-        //     $this->db->query("DELETE FROM libros WHERE idLibro = '$idLibro'");
-
-        //     // Mostramos mensaje con el resultado de la operación
-        //     if ($this->db->affected_rows == 0) {
-        //         echo "Ha ocurrido un error al borrar el libro. Por favor, inténtelo de nuevo";
-        //     } else {
-        //         echo "Libro borrado con éxito";
-        //     }
-        //     echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
-        // }
-
-        // --------------------------------- FORMULARIO MODIFICAR LIBROS ----------------------------------------
 
         public function formularioModificarLibro()
         {
@@ -246,8 +198,6 @@
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
         }
 
-        // --------------------------------- MODIFICAR LIBROS ----------------------------------------
-
         public function modificarLibro()
         {
             echo "<h1>Modificación de libros</h1>";
@@ -286,8 +236,6 @@
             }
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
         }
-
-        // --------------------------------- BUSCAR LIBROS ----------------------------------------
 
         public function buscarLibros()
         {
@@ -342,6 +290,3 @@
     } // class
     ?>
 
-</body>
-
-</html>
