@@ -1,0 +1,65 @@
+html, body {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+    background-image: radial-gradient(circle at center center, transparent 0%,rgb(33,33,33) 99%),repeating-linear-gradient(0deg, rgba(163, 163, 163,0.2) 0px, rgba(163, 163, 163,0.2) 1px,transparent 1px, transparent 6px),repeating-linear-gradient(90deg, rgba(163, 163, 163,0.2) 0px, rgba(163, 163, 163,0.2) 1px,transparent 1px, transparent 6px),linear-gradient(90deg, rgb(33,33,33),rgb(33,33,33));
+    color: white;
+}
+body {
+    filter: brightness(0.9);
+    padding-bottom: 150px;
+}
+table {
+    width: 80%;
+    border-collapse: collapse;
+    background: #2c2c2c; /* Fondo ligeramente más claro que el fondo principal */
+    border: 1px solid #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #444;
+    color: #ddd;
+  }
+
+  th {
+    background: #444; /* Fondo para encabezados */
+    color: #fff;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background: #333; /* Alterna filas */
+  }
+
+  tr:hover {
+    background: #555; /* Resalta fila al pasar el ratón */
+    color: #fff;
+  }
+
+  caption {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+a {
+    color: rgb(69, 69, 250);
+    text-decoration:underline;
+}
+a:visited {
+    color: rgb(184, 158, 248);
+    text-decoration: underline;
+}
+form input{
+    margin:5px;
+}
