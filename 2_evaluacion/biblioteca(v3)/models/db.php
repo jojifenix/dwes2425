@@ -30,7 +30,7 @@ class Db
     function myQuery($q)
     {
 
-
+        $items=[];
         try {
             $result = $this->db->execute_query($q);
 
@@ -40,12 +40,10 @@ class Db
                     $items[] = $fila;
                 }
             }
+            $result->close();
         } catch (mysqli_sql_exception $e) {
             echo "Error: " . $e->getMessage();
-        } finally {
-            $result->close();
-        }
-
+        } 
         return $items;
     }
 

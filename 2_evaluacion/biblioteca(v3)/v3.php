@@ -26,106 +26,98 @@
         private $db = null;
         private $libro, $persona, $user;
 
-        public function __construct()
-        {
+        public function __construct(){
             $this->libro = new Libro();
             $this->persona = new Persona();
             $this->user = new User();
-        }
+        }//constructor
 
-        public function adminAll()
-        {
+        public function adminAll(){
             
             View::render('admin');
-        }
+        }//adminAll
 
         public function logOut() {
             session_start();
             session_destroy();
             header("location:".$_SERVER['PHP_SELF']);
             //al cargar la página sin action, muestra la vista ppal
-        }
+        }//logOut
 
-        public function loginForm()
-        {
+        public function loginForm(){
             // include "views/nav.php";
             View::render('login');
             // include "views/footer.php";
-        }
+        }//loginForm
 
-        public function validate()
-        {
+        public function validate(){
             //recoger los datos del form y comprobar si existe user, pwd y con qué rol
             $data['login'] = $_REQUEST;
             $iduser = $this->user->validate($data['login']);
-
             // $this->user->validate($data['login']);
             if ($iduser) { 
-         
-
                 //pedir el rol del usuario
                 //mostrar la vista principal de ese rol
                 //cargar en la sesion id, rol y preferencias
-
                 $roles = $this->user->getRoles($iduser);
                 session_start();
                 $_SESSION['iduser'] = $iduser;
+                //cargar en la sesion los préstamos del usuario
+                $_SESSION['cart']=$this->libro->getPrestamos($iduser);
                 if(isset($roles['adm'])) {
                     $_SESSION['adm'] = $iduser;//no escribo cli en la sesión
                     $this->adminAll();
-                   
                 }else $this->libroAll();
-
             } else {
                 $this->loginForm();
                 echo "Datos incorrectos. Inténtelo de nuevo";
                 //se podria meter una vista de error, de forma que se llame con:
                 //View::render('error', $data); --> "No hay datos con ese correo", o "La contraseña no es correcta", o lo que sea
             }
-        }
+        }//validate
 
-        public function libroAll()
-        {
+        public function libroAll(){
             // include "views/nav.php";
             $data['libro_all'] = $this->libro->getAll();
             View::render('libro/all', $data);
             // include "views/footer.php";
-        }
+        }//libroAll
 
-        public function libroForm()
-        {
+        public function libroForm(){
             if (isset($_REQUEST['idLibro'])) {
                 $data['libroID'] = $_REQUEST['idLibro'];
             }
             $data['persona_all'] = $this->persona->getAll();
             View::render('libro/save', $data);
-        }
+        }//libroForm
 
-        public function libroSave()
-        {
+        public function libroSave(){
 
             $libro = $_REQUEST;
             unset($libro['action']);
             print_r($libro);
             $this->libro->save($libro);
             $this->libroAll();
-        }
+        }//libroSave
 
-        public function libroModificar()
-        {
+        public function libroPrestar(){
+            $idLibro=$_REQUEST['idLibro'];
+            $this->libro->prestar($_SESSION['iduser'],$idLibro);
+            $this->libroAll();
+        }//libroPrestar
+
+        public function libroModificar(){
             $libro = $_REQUEST;
             unset($libro['action']);
             $this->libro->update($libro);
             $this->libroAll();
-        }
+        }//libroModificar
 
-        public function personaForm()
-        {
+        public function personaForm(){
             View::render('persona/save'); // 
-        }
+        }//personaForm
 
-        public function personaSave()
-        {
+        public function personaSave(){
             $persona = $_REQUEST;
             unset($persona['action']);
             $this->persona->save($persona);
@@ -133,23 +125,20 @@
             unset($persona['apellido']);
             unset($persona['pais']);
             $this->libroForm();
-        }
+        }//personaSave
 
-        public function libroGet()
-        {
+        public function libroGet(){
             $data['libro_all'] = $this->libro->get($_REQUEST['textoBusqueda']);
             View::render('libro/all', $data);
             echo "<p><a href='" . htmlspecialchars($_SERVER['PHP_SELF']) . "'>Resetear búsqueda</a></p>";
-        }
+        }//libroGet
 
-        public function libroDelete()
-        {
+        public function libroDelete(){
             $this->libro->delete($_REQUEST['idLibro']);
             $this->libroAll();
-        }
+        }//libroDelete
 
-        public function formularioModificarLibro()
-        {
+        public function formularioModificarLibro(){
             echo "<h1>Modificación de libros</h1>";
 
             // Recuperamos el id del libro que vamos a modificar y sacamos el resto de sus datos de la BD
@@ -196,10 +185,9 @@
                     <input type='submit'>
                   </form>";
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
-        }
+        }//formularioModificarLibro
 
-        public function modificarLibro()
-        {
+        public function modificarLibro(){
             echo "<h1>Modificación de libros</h1>";
 
             // Vamos a procesar el formulario de modificación de libros
@@ -235,10 +223,9 @@
                 echo "Ha ocurrido un error al modificar el libro. Por favor, inténtelo más tarde.";
             }
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
-        }
+        }//modificarLibro
 
-        public function buscarLibros()
-        {
+        public function buscarLibros(){
             // Recuperamos el texto de búsqueda de la variable de formulario
             $textoBusqueda = $_REQUEST["textoBusqueda"];
             echo "<h1>Resultados de la búsqueda: \"$textoBusqueda\"</h1>";
@@ -286,7 +273,7 @@
             }
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "?action=formularioInsertarLibros'>Nuevo</a></p>";
             echo "<p><a href='" . $_SERVER['PHP_SELF'] . "'>Volver</a></p>";
-        }
+        }//buscarLibros
     } // class
     ?>
 

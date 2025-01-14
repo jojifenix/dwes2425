@@ -1,31 +1,37 @@
 <h1>Listado de libros</h1>
-<table border='1'>
+<h1>Biblioteca</h1>";
 
-<?php
-echo "<h1>Biblioteca</h1>";
-
-echo "<form action='" . $_SERVER['PHP_SELF'] . "'>
+<form action=" . $_SERVER['PHP_SELF'] .">
     <input type='hidden' name='action' value='libroGet'>
     <input type='text' name='textoBusqueda'>
     <input type='submit' value='Buscar'>
     </form><br><br>";
 
-$actual = null; // Inicializamos con un valor que no coincida con ningún idLibro
-$autores = ""; // Inicializamos una cadena vacía
+<table border='1'>
 
-if (!empty($data['libro_all'])) {
+<?php
+
+if(!empty($data['libro_all'])){
     $actual = $data['libro_all'][0];
-    $campos = array_keys(get_object_vars($actual));
-    unset($campos['nombre']);
-    unset($campos['apellido']);
+    //la query me da el nombre y apellido juntos formateados en un campo autor
+    $campos = array_keys(get_object_vars($actual));// de objeto a array
+    //unset($campos['nombre']);//debido a la concatenacion del archivo libro.php
+
+    //CABECERAS
+    echo "<tr>";
+    foreach ($campos as $k=>$v){
+        echo "<th>".strToUpper($k)."</th>";
+    }
+    echo "</tr>";
 
     foreach ($data['libro_all'] as $libro) {
+        echo "<tr>";
+
         if ($libro->idLibro != $actual->idLibro) {
-            echo "<tr>";
             foreach ($campos as $c) {
                 echo "<td>" . $actual->$c . "</td>";
             }
-            echo "<td>" . $autores . "</td>"; // autores acumulados
+            //echo "<td>" . $autores . "</td>"; // autores acumulados
 
             if (isset($_SESSION['iduser'])) {
                 echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroPrestart&idLibro=" . $actual->idLibro . "'>Prestar</a></td>";
@@ -38,17 +44,23 @@ if (!empty($data['libro_all'])) {
             echo "</tr>";
 
             $actual = $libro;
-            $autores = "";
-        }
-        $autores .= $libro->apellido . ", " . $libro->nombre . "<br>";
-    }
+          // $actual->autores="";
+           // $actual->autores = "";
+        }//if idLIbro
+        //$autores .= $libro->apellido . ", " . $libro->nombre . "<br>";
+        //$autores .= $libro->autores."<br>"; //por la concatenacion en libro.php
+        $actual->autores.=$libro->autores."<br>";
+
+        
+
+    }//foreach
 
     // Imprimir el último libro
     echo "<tr>";
     foreach ($campos as $c) {
         echo "<td>" . $actual->$c . "</td>";
     }
-    echo "<td>" . $autores . "</td>"; // autores acumulados
+    //echo "<td>" . $autores . "</td>"; // autores acumulados
 
     if (isset($_SESSION['iduser'])) {
         echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroPrestart&idLibro=" . $actual->idLibro . "'>Prestar</a></td>";
@@ -59,7 +71,10 @@ if (!empty($data['libro_all'])) {
               <td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroDelete&idLibro=" . $actual->idLibro . "'>Borrar</a></td>";
     }
     echo "</tr>";
+}else{
+    echo "<tr><td colspan='5'>No hay libros disponibles </td></tr>";
 }
+
 ?>
 
 </table>

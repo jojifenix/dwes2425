@@ -5,32 +5,57 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 require_once "db.php";
 
-class Libro
-{
+class Libro{
     private $db;
 
-    function __construct() {
+    function __construct(){
         $this->db = new DB();
-    }
+    }//construct
 
-    public function getAll()
-    {
-            $q = "SELECT escriben.idLibro as idLibro
-                        titulo,genero,pais,ano,numPaginas, ano,ejemplares
+    public function getAll(){
+            $q = "SELECT escriben.idLibro as idLibro,
+                        titulo,genero,numPaginas,ano as año, disponibles ,
                         libros.pais as pais,
-                        apellido,nombre
+                        concat(apellido, ',', nombre) as autores
                         
             FROM libros 
             LEFT JOIN escriben ON libros.idLibro = escriben.idLibro 
             LEFT JOIN personas ON escriben.idPersona = personas.idPersona 
             ORDER BY libros.idLibro, libros.titulo";  
+
+            //$p=SELECT * FROM vlibros; Otra opción sería crear una VISTA en mysql de la parte de arriba asi solo la llamamos.
             $items = $this->db->myQuery($q);
             return $items;
-    }
+    }//getAll
 
-    public function save($libro)
-    {
+    public function getPrestamos($iduser){
 
+        try {
+
+
+            $db = new mysqli("localhost", "root", "root", "books");
+            $q = "SELECT 
+                        prestan.idLibro as idLibro,
+                        titulo,genero,numPaginas,
+                        ano as año,
+                        disponibles,
+                        libros.pais as pais,
+                        concat(apellido, ',', nombre) as autores
+                        FROM prestan
+                        INNER JOIN escriben ON prestan.idLibro = escriben.idLibro 
+                        INNER JOIN personas ON escriben.idPersona = personas.idPersona 
+                        WHERE iduser=?
+                        ORDER BY libros.idLibro, libros.titulo";
+                    
+            $items = $this->db->myQuery($q);
+            return $items;
+        } catch (mysqli_sql_exception $e) {
+            echo "Error al prestar el libro " . $e->getMessage();
+        } finally {
+            $db->close();
+        }
+    }  //getPrestamos
+    public function save($libro){
         $autores = $libro['autor']; //es un array pq son varios
         unset($libro['autor']);
 
@@ -130,10 +155,9 @@ class Libro
         } finally {
             $db->close();
         }
-    }
+    }//save
 
-    public function get($busqueda)
-    {
+    public function get($busqueda){
         try {
 
 
@@ -188,15 +212,14 @@ class Libro
             }
             // $db->close();
             return $libro;
-        } catch (mysqli_sql_exception $e) {
-            echo "Error al buscar el libro: " . $e->getMessage();
-        } finally {
-            $db->close();
+            } catch (mysqli_sql_exception $e) {
+                echo "Error al buscar el libro: " . $e->getMessage();
+            } finally {
+                $db->close();
         }
-    }
-
-    public function delete($idLibro)
-    {
+    }//get
+    
+    public function delete($idLibro){
         try {
             $db = new mysqli("localhost", "root", "root", "books");
             $db->query("DELETE FROM libros WHERE idLibro = '$idLibro'");
@@ -210,10 +233,9 @@ class Libro
         } finally {
             $db->close();
         }
-    }
+    }//delete
 
-    public function update($libro)
-    {
+    public function update($libro){
 
 
         try {
@@ -299,5 +321,36 @@ class Libro
         } finally {
             $db->close();
         }
-    }
+    }//update
+
+    public function prestar($iduser,$item){
+            
+            try {
+                $db = new mysqli("localhost", "root", "root", "books");
+                //verificar la conexion
+                if (mysqli_connect_errno()) {
+                    printf("Connect failed: %s\n", mysqli_connect_error());
+                    exit();
+                } 
+                //transaccion
+                $db->autocommit(false);
+                $db->commit();
+                //consulta preparada
+                $q= "UPDATE libros SET
+                disponibles=disponibles-1
+                WHERE  idLibro=?";
+
+                $db->execute_query($q,[$item]);
+
+                //anotar préstamo al usuario
+                $q="INSERT INTO prestan (iduser,idLibro)
+                    VALUES (?,?)";
+                  $db->execute_query($iduser,$item);
+              
+            } catch (mysqli_sql_exception $e) {
+                echo "Error al prestar el libro: " . $e->getMessage();
+            } finally {
+               $db->close();
+            }
+    }//prestar
 }
