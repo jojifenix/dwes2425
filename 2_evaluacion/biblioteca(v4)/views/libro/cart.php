@@ -1,23 +1,36 @@
-<!--Listado de libros-->
+<h1>Listado de libros</h1>
 <table border='1'>
     <?php
-   
-    $libros = $data['libro_all'];//sólo los códigos no los datos completos
-    print_r($libros); echo "<br/>";
-    //TITULOS TABLA
-    $campos = get_object_vars($libros[array_key_first($libros)]);
+    // Mostrar formulario de búsqueda
+    echo "<h1>Biblioteca</h1>";
+    echo "<form action='" . $_SERVER['PHP_SELF'] . "'>
+        <input type='hidden' name='action' value='libroGet'>
+        <input type='text' name='textoBusqueda'> 
+        <input type='submit' value='Buscar'>
+    </form>";
+
+    $libros = $data['libro_all']; // Primer libro
+
+    $campos = (get_object_vars($libros[0])); // Obtener nombres de propiedades 
+
     echo "<tr>";
     foreach ($campos as $c => $v) {
-        echo "<th>".strToUpper($c)."</th>\n";
+        echo "<th>$c</th>";
     }
     echo "</tr>";
-    // CUERPO TABLA.   Recorremos la lista de libros
+
+    // Recorremos la lista de libros
     foreach ($libros as $libro) {
         echo "<tr>";
+
+        //salto de linea entre autores
         $libro->autores = str_replace(";", "<br>", ucwords($libro->autores));
+
         foreach ($campos as $c => $v) {
             echo "<td>" . ($libro->$c) . "</td>";
         }
+
+
         // if (isset($_SESSION['adm'])) {
         //     if ($libro->disponibles > 0) {
         //         echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroReservar&idLibro=" . $libro->idLibro . "'>".MSSGS['reserve']."</a></td>";

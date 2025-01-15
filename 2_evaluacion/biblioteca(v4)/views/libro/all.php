@@ -10,24 +10,23 @@
     </form>";
 
     $libros = $data['libro_all']; // Primer libro
-
     $campos = (get_object_vars($libros[0])); // Obtener nombres de propiedades 
-
     echo "<tr>";
-    foreach ($campos as $c => $v) {
+    foreach ($campos as $c => $v){
         echo "<th>$c</th>";
     }
     echo "</tr>";
 
     // Recorremos la lista de libros
-    foreach ($libros as $libro) {
+    foreach ($libros as $libro){
         echo "<tr>";
 
-        //salto de linea entre autores
-        $libro->autores = str_replace(";", "<br>", ucwords($libro->autores));
-
         foreach ($campos as $c => $v) {
-            echo "<td>" . ($libro->$c) . "</td>";
+            echo "<td>";
+            if($c=="autores")
+             echo str_replace(";","<br/>\n", ucwords($libro->$c));
+             else echo $libro->$c;
+             echo "</td>";
         }
 
 
@@ -71,8 +70,6 @@
 
         echo "</tr>";
     } 
-
-
 
     ?>
 </table>

@@ -67,8 +67,10 @@
                 $roles = $this->user->getRoles($iduser);
                 session_start();
                 $_SESSION['iduser'] = $iduser;
+                //añadido 15012025
+                $_SESSION['cart']=[];
                 // $_SESSION['books'] = $this->libro->getPrestamos($iduser);
-                $prestamos = ($this->libro->getPrestamos($iduser));
+                if(!empty($prestamos))
                 foreach ($prestamos as $p) {
                     $_SESSION['cart'][$p] = 1; //Prestdo. 0, reservado.
                     //Por otro lado, cabe recalcar que no se puede prestar el mismo libro
@@ -77,7 +79,7 @@
                     //No hay 2 claves iguales.
                 }
 
-
+                $roles=$this->user->getRoles($iduser);
                 if (isset($roles['adm'])) {
                     $_SESSION['adm'] = $iduser;
                     // View::render('admin');
@@ -87,8 +89,10 @@
                 }
 
             } else {
+                echo MSSGS['loginerror']."<br/>";
                 $this->loginForm();
-                echo "Datos incorrectos. Inténtelo de nuevo";
+                
+                
                 //se podria meter una vista de error, de forma que se llame con:
                 //View::render('error', $data); --> "No hay datos con ese correo", o "La contraseña no es correcta", o lo que sea
             }
@@ -119,10 +123,14 @@
         public function libroCart(){
             //el carrito está en la sesión
             session_start();
-            $data['libro_cart'] = $this->libro->get($_SESSION['cart']); //todo get
-            if(empty($data['libro_cart'])) View::render('message', MSSGS['empty']);
+            
+            
+            $data['libro_cart']= $this->libro->getCart($_SESSION['cart']); //todo get
+            
+            if(empty($data['libro_cart'])) View::render('message',["mensaje"=> MSSGS['empty']]);
             else View::render('libro/cart',$data); 
         }
+
         public function libroPrestar(){
             // if(!isset($_SESSION)) session_start();
             // $this->libro->prestar($_SESSION['iduser'], $_REQUEST['idLibro']);

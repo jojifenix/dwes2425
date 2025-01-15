@@ -8,8 +8,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 class Libro
 {
 
-    public static function getAll()
-    {
+    public static function getAll(){
         try {
             $db = new mysqli("localhost", "root", "root", "books");
 
@@ -45,8 +44,7 @@ class Libro
         }
     }
 
-    public static function save($libro)
-    {
+    public static function save($libro){
 
         $autores = $libro['autor']; //es un array pq son varios
         unset($libro['autor']);
@@ -149,8 +147,7 @@ class Libro
         }
     }
 
-    public static function get($busqueda)
-    {
+    public static function get($busqueda){
         try {
 
 
@@ -212,8 +209,7 @@ class Libro
         }
     }
 
-    public static function delete($idLibro)
-    {
+    public static function delete($idLibro){
         try {
             $db = new mysqli("localhost", "root", "root", "books");
             $db->query("DELETE FROM libros WHERE idLibro = '$idLibro'");
@@ -229,8 +225,7 @@ class Libro
         }
     }
 
-    public static function update($libro)
-    {
+    public static function update($libro){
 
 
         try {

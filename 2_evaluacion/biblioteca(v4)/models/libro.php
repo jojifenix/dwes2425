@@ -51,7 +51,7 @@ class Libro{
         where iduser=?
         order by prestan.idLibro";
 
-            if ($result = $db->execute_query($q, [$iduser])) {
+            if ($result = $db->execute_query($q, [$iduser])) { //id$user debe ser un array de un solo elemento por eso usamos el corchete (investigar que se usa asi para evitar inyeccion sql)
                 if ($result->num_rows != 0) {
                     $items = [];
                     while ($fila = $result->fetch_object()) {
@@ -69,7 +69,7 @@ class Libro{
         //se podria crear una vista en la base de datos con la consulta y llamar a la vista
         //$q = "SELECT * FROM vista_libros";
     }
-    public function getAll(){
+     public function getAll(){
         // $q = "SELECT libros.idLibro, libros.titulo, libros.genero, libros.numPaginas, libros.ano, libros.pais, personas.nombre, personas.apellido, libros.ejemplares
         // $q = "SELECT libros.idLibro, libros.titulo, libros.genero, libros.numPaginas, libros.ano, libros.pais, libros.ejemplares, libros.disponibles, concat(personas.apellido, ', ', personas.nombre) as autores
         //     FROM libros 
@@ -84,7 +84,7 @@ class Libro{
 
         //se podria crear una vista en la base de datos con la consulta y llamar a la vista
         //$q = "SELECT * FROM vista_libros";
-    }
+    } 
     public function reservar($idLibro){
         try {
                $db = new mysqli("localhost", "root", "root", "books");
@@ -107,8 +107,8 @@ class Libro{
                     exit();
                 }
 
-                                    //añadido dia 14012025
-                     $q = "UPDATE libros SET 
+                    //añadido dia 14012025
+                    $q = "UPDATE libros SET 
                     disponibles = disponibles - 1
                         WHERE idLibro IN(";
                     foreach($cart as $id=>$v){
@@ -257,8 +257,41 @@ class Libro{
             $db->close();
         }
     }
-    //añadido 14012025
-    public function get($ids){}// continua en la otra clase
+    //añadido 15012025
+    public function getCart($ids){
+        try {
+            $db = new mysqli("localhost", "root", "root", "books");
+            if(mysqli_connect_errno()){
+                printf("Conexión fallida: %s\n", mysqli_connect_error());
+                exit();
+            }
+            $items = [];
+            if(!empty($ids)){
+
+                $q = "SELECT * FROM libros WHERE idLibro IN(";
+                foreach ($ids as $id) {
+                    $q .= "?, ";
+                }
+                if(!empty($ids))$q = rtrim($q, ", ") . ")";
+            // print_r($ids); 
+            // echo "<br/>";
+                $result = $db->execute_query($q,array_keys($ids));//los valores están con las claves
+                    if ($result->num_rows != 0) {
+                        while ($fila = $result->fetch_object()) {
+                            $items[] = $fila;
+                        }
+                    }
+            }//if $ids
+            return $items;
+        } catch (mysqli_sql_exception $e) {
+            echo "Error : " . $e->getMessage();
+            return [];  // En caso de error, se retorna un array vacío
+        } finally {
+            $db->close();  // Siempre se cierra la conexión
+        }
+    }//getCart
+
+
     public function filter($busqueda){
         try {
             $db = new mysqli("localhost", "root", "root", "books");
