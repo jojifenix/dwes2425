@@ -268,7 +268,9 @@ class Libro{
             $items = [];
             if(!empty($ids)){
 
-                $q = "SELECT * FROM libros WHERE idLibro IN(";
+                $q = "SELECT idLibro,titulo,genero,numPaginas,ano,pais,autores 
+                
+                     FROM vlibros WHERE idLibro IN(";
                 foreach ($ids as $id) {
                     $q .= "?, ";
                 }

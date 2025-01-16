@@ -70,6 +70,7 @@
                 $_SESSION['iduser'] = $iduser;
                 //añadido 15012025
                 $_SESSION['cart']=[];
+                $_SESSION['prestados']=0;
                 // $_SESSION['books'] = $this->libro->getPrestamos($iduser);
                 if(!empty($prestamos))
                 foreach ($prestamos as $p) {
@@ -78,8 +79,9 @@
                     //a la vez.
                     // [cart] => Array ( [2] => 1 [20] => 1 )
                     //No hay 2 claves iguales.
+                    $_SESSION['prestados']=count($prestamos);
                 }
-
+               
                 $roles=$this->user->getRoles($iduser);
 
 
@@ -130,19 +132,31 @@
         //Añadido 14012025
         public function libroCart(){
             //el carrito está en la sesión
-            session_start();
+            if(!isset($_SESSION))session_start();
             
             
             $data['libro_cart']= $this->libro->getCart($_SESSION['cart']); //todo get
-            
+            $data['prestados'] = $_SESSION['prestados'];
             if(empty($data['libro_cart'])) View::render('message',["mensaje"=> MSSGS['empty']]);
             else View::render('libro/cart',$data); 
         }
         public function libroPrestar(){
-            // if(!isset($_SESSION)) session_start();
-            // $this->libro->prestar($_SESSION['iduser'], $_REQUEST['idLibro']);
-            // $this->libroAll();
+             if(!isset($_SESSION)) session_start();
+
+             $idLibro = $_REQUEST['idLibro'];
+             $this->libro->prestar($_SESSION['iduser'], $idLibro);
+             $_SESION['cart'][$idLibro] = 1;
+             $this->libroCart();
         }
+
+
+        public function libroCancelar(){
+            if(!isset($_SESSION)) session_start();
+            $idLibro = $_REQUEST['idLibro'];
+           unset($_SESSION['cart'][$idLibro]);
+           $this->libro->liberar([$idLibro => RESERVADO]);
+           $this->libroCart();
+       }
         public function libroReservar() {
             //Tiene acceso a la sesión con los prestados, las reservas , el rol etc.
             if(!isset($_SESSION)) session_start();

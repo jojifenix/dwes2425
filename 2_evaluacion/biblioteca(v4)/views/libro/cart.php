@@ -9,10 +9,9 @@
         <input type='submit' value='Buscar'>
     </form>";
 
-    $libros = $data['libro_all']; // Primer libro
-
+    printf(MSSGS['maxbooks'],MAXBOOKS,MAXCART); echo "<br/>";
+    $libros = $data['libro_cart']; 
     $campos = (get_object_vars($libros[0])); // Obtener nombres de propiedades 
-
     echo "<tr>";
     foreach ($campos as $c => $v) {
         echo "<th>$c</th>";
@@ -22,53 +21,42 @@
     // Recorremos la lista de libros
     foreach ($libros as $libro) {
         echo "<tr>";
-
         //salto de linea entre autores
         $libro->autores = str_replace(";", "<br>", ucwords($libro->autores));
-
         foreach ($campos as $c => $v) {
             echo "<td>" . ($libro->$c) . "</td>";
-        }
-
-
-        // if (isset($_SESSION['adm'])) {
-        //     if ($libro->disponibles > 0) {
-        //         echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroReservar&idLibro=" . $libro->idLibro . "'>".MSSGS['reserve']."</a></td>";
-        //     } else {
-        //         echo "<td>".MSSGS['unavailable']."</td>";
-        //     }
-        //     echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroForm&idLibro=" . $libro->idLibro . "'>Modificar</a></td>";
-        //     echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroDelete&idLibro=" . $libro->idLibro . "'>Borrar</a></td>";
-        // } elseif (isset($_SESSION['iduser'])) {
-        //     if ($libro->disponibles > 0) {
-        //         echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroReservar&idLibro=" . $libro->idLibro . "'>".MSSGS['reserve']."</a></td>";
-        //     } else {
-        //         echo "<td>".MSSGS['unavailable']."</td>";
-        //     }
-        // }
-
-        if (isset($_SESSION['iduser'])) {
+        }//foreach campos
+        //vista carrito asegura usuarios identificados
             echo "<td>";
-
-            if (isset($_SESSION['cart'][$libro->idLibro])) {
-                if ($_SESSION['cart'][$libro->idLibro] === 0) {
-                    echo MSSGS['reserved'];
-                } else if ($_SESSION['cart'][$libro->idLibro] === 1) {
+            if (isset($_SESSION['cart'][$libro->idLibro]) && $_SESSION['cart'][$libro->idLibro] == 1) {//if prestado
                     echo MSSGS['borrowed'];
+
+                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?action=libroDevolver&idLibro=".$libro->idLibro."'>".MSSGS['return']."</a>";
+                    
+                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?action=libroRenovar&idLibro=".$libro->idLibro."'>".MSSGS['extend']."</a>";
+                } else {
+                    echo MSSGS['reserved'];
+                    echo "<td>";
+
+                    echo "<td>";
+                    if($data['prestados']=MAXBOOKS){
+                        echo MSSGS['maxbooktd'];
+                    }else{//admito el prestamos
+                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?action=libroPrestar&idLibro=".$libro->idLibro."'>".MSSGS['borrow']."</a>";
+                    }
+
+                    echo "</td>";
+                    echo "<td>";
+
+                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?action=libroCancelar&idLibro=".$libro->idLibro."'>".MSSGS['cancel']."</a>";
                 }
-            } else if ($libro->disponibles > 0) {
-                echo "<a href='" . $_SERVER['PHP_SELF'] . "?action=libroReservar&idLibro=" . $libro->idLibro . "'>" . MSSGS['reserve'] . "</a>";
-            } else {
-                echo MSSGS['unavailable'];
-            }
             echo "</td>";
-        }
+    
 
         if (isset($_SESSION['adm'])) {
             echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroForm&idLibro=" . $libro->idLibro . "'>Modificar</a></td>";
             echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?action=libroDelete&idLibro=" . $libro->idLibro . "'>Borrar</a></td>";
         }
-
         echo "</tr>";
     } 
 
