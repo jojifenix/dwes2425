@@ -8,7 +8,9 @@
         <input type='text' name='textoBusqueda'> 
         <input type='submit' value='Buscar'>
     </form>";
-
+    if (isset($data['maxcart'])) {
+        printf( $data['maxcart'],$_SERVER['PHP_SELF']); echo "<br/>";
+    }
     $libros = $data['libro_all']; // Primer libro
     $campos = (get_object_vars($libros[0])); // Obtener nombres de propiedades 
     echo "<tr>";

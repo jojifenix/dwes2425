@@ -58,6 +58,7 @@
 
             // $this->user->validate($data['login']);
             if ($iduser != 0) {
+              
                 echo "Usuario encontrado, bienvenido " . $iduser;
 
                 //pedir el rol del usuario
@@ -80,6 +81,8 @@
                 }
 
                 $roles=$this->user->getRoles($iduser);
+
+
                 if (isset($roles['adm'])) {
                     $_SESSION['adm'] = $iduser;
                     // View::render('admin');
@@ -87,7 +90,6 @@
                 } else {
                     $this->libroAll();
                 }
-
             } else {
                 echo MSSGS['loginerror']."<br/>";
                 $this->loginForm();
@@ -114,10 +116,16 @@
         public function libroAll(){
             // include "views/nav.php";
             $data['libro_all'] = $this->libro->getAll();
+
+            if(isset($_SESSION)){
+                if(count($_SESSION['cart'])==MAXCART) {
+                    $data['maxcart']=MSSGS['maxcart'];
+                   }//maxcart
+
             if(empty($data['libro_all'])) View::render('message', MSSGS['empty']);
             else View::render('libro/all', $data);
             // include "views/footer.php";
-        }
+        }}
         /*----------------------------------MOSTRAR CARRITO DE LIBROS----------------------------*/
         //Añadido 14012025
         public function libroCart(){
@@ -130,16 +138,17 @@
             if(empty($data['libro_cart'])) View::render('message',["mensaje"=> MSSGS['empty']]);
             else View::render('libro/cart',$data); 
         }
-
         public function libroPrestar(){
             // if(!isset($_SESSION)) session_start();
             // $this->libro->prestar($_SESSION['iduser'], $_REQUEST['idLibro']);
             // $this->libroAll();
         }
         public function libroReservar() {
+            //Tiene acceso a la sesión con los prestados, las reservas , el rol etc.
             if(!isset($_SESSION)) session_start();
             $this->libro->reservar($_REQUEST['idLibro']);
             $_SESSION['cart'][$_REQUEST['idLibro']] = 0; //1=prestado, 0=reservado 
+
             $this->libroAll();
         }
         public function libroForm(){
