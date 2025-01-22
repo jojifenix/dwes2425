@@ -36,15 +36,12 @@
             $this->user = new User();
         }
         public function logOut(){
-             //añadido dia 14012025
-            session_start();
-             //restaurar los ejemplares de libros reservados pero no prestados
+            if(!isset($S_SESSION))session_start();
+            //restaurar los ejemplares de libros reservados pero no prestados
             $this->libro->liberar($_SESSION['cart']);
-
             session_destroy();
-            // unset($_SESSION);
             header("location:" . $_SERVER['PHP_SELF']);
-            // $this->libroAll();
+            exit();
         }
         public function loginForm(){
             // include "views/nav.php";
@@ -117,17 +114,20 @@
         }
         public function libroAll(){
             // include "views/nav.php";
+           if (!isset($_SESSION)) session_start();
             $data['libro_all'] = $this->libro->getAll();
 
-            if(isset($_SESSION)){
-                if(count($_SESSION['cart'])==MAXCART) {
-                    $data['maxcart']=MSSGS['maxcart'];
-                   }//maxcart
+            if(isset($_SESSION['cart']) && count($_SESSION['cart']) == MAXCART) { // Verificar si 'cart' está definido
+                $data['maxcart'] = MSSGS['maxcart'];
+            } //maxcart
 
-            if(empty($data['libro_all'])) View::render('message', MSSGS['empty']);
-            else View::render('libro/all', $data);
+            if(empty($data['libro_all'])) {
+                View::render('message', MSSGS['empty']);
+            } else {
+                View::render('libro/all', $data);
+            }
             // include "views/footer.php";
-        }}
+        }
         /*----------------------------------MOSTRAR CARRITO DE LIBROS----------------------------*/
         //Añadido 14012025
         public function libroCart(){
@@ -148,26 +148,6 @@
              $_SESION['cart'][$idLibro] = 1;
              $this->libroCart();
         }
-
-
-        public function libroDevolver(){
-            if(!isset($_SESSION)) session_start();
-
-            $idLibro = $_REQUEST['idLibro'];
-            $this->libro->devolver($_SESSION['iduser'], $idLibro);//devolver BD
-            unset($_SESION['cart'][$idLibro]); //quitar de la sesión 
-            $this->libroCart();
-        }//libroDevolver
-
-        public function libroRenovar(){
-            if(!isset($_SESSION)) session_start();
-
-            $idLibro = $_REQUEST['idLibro'];
-            $this->libro->renovar($_SESSION['iduser'], $idLibro);//modificar fecha
-            $this->libroCart();
-        }//libroRenovar
-
-
         public function libroCancelar(){
             if(!isset($_SESSION)) session_start();
             $idLibro = $_REQUEST['idLibro'];

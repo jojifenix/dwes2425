@@ -101,27 +101,29 @@ class Libro{
     public function liberar($cart){
         try {
                 $db = new mysqli("localhost", "root", "root", "books");
-
                 if (mysqli_connect_errno()) {
                     printf("Connect failed: %s\n", mysqli_connect_error());
                     exit();
                 }
-
                     //añadido dia 14012025
-                    $q = "UPDATE libros SET 
-                    disponibles = disponibles - 1
-                        WHERE idLibro IN(";
-                    foreach($cart as $id=>$v){
-                        if($v==RESERVADO){
+                $q = "UPDATE libros SET 
+                      disponibles = disponibles - 1
+                      WHERE idLibro IN(";
+                $ids=[];
+                foreach($cart as $id=>$v){
+                    if($v==RESERVADO){
                         $ids[]=$id;
                         $q.="?,";
-                    }}
-                    $q=rtrim($q,",");
-                    $q.=")";
-                    //echo $q;
-                    $db->execute_query($q, [$ids]);//query preparada una con interrogaciones
+                    }
+                }
+                $q=rtrim($q,",").")";
+                if(!empty($ids)){
+                    $stmt=$db->prepare($q);
+                    $stmt->bind_param(str_repeat('i',count($ids)),...$ids);
+                    $stmt->execute();
+                }
         } catch (mysqli_sql_exception $e) {
-            echo "Error al prestar el libro: " . $e->getMessage();
+            echo "Error al liberar el libro: " . $e->getMessage();
         } finally {
             $db->close();
         }
@@ -157,70 +159,6 @@ class Libro{
             $db->close();
         }
     }
-
-
-    public function devolver($iduser, $idItem){
-        // $q = "UPDATE libros SET disponibles = disponibles - 1 WHERE idLibro = " . $idLibro;
-        // $resultado = $this->db->myUpdateQuery($q);
-
-
-        // ----forma de la profe (sin crear la funcion myUpdateQuery en bd.php----
-
-        try {
-            $db = new mysqli("localhost", "root", "root", "books");
-
-            if (mysqli_connect_errno()) {
-                printf("Connect failed: %s\n", mysqli_connect_error());
-                exit();
-            }
-            //INICIAR TRANSACION    
-            $db->autocommit(FALSE);
-            $db->commit();
-
-           //obtener los datos del préstamos
-           
-           $q="SELECT CONCAT_WS(";", titulo, numPaginas, ano, pais, autores) as datosLibro
-                FROM vlibros
-                WHERE idLibro=?";
-
-            $q="SELECT CONCAT_WS(";", user,dni,nomcli,apecli,dircli,cpcli) as datosuser
-                FROM users
-                WHERE iduser=?";
-
-
-
-
-            $q = "INSERT INTO prestanhist(
-                iduser, datosuser,
-                idlibro,datoslibro,
-                fechai,fechad)
-                VALUES (?,?,?,?,?,?)";
-                 $db->execute_query($q, [$item]);
-
-            //anotar el préstamo al usuario
-            $q = "UPDATE libros SET disponibles = disponibles - 1 WHERE idLibro =?";
-            $db->execute_query($q, [$idLibro]);
-
-            $q = "INSERT INTO prestan (iduser, idlibro) VALUES (?, ?)";
-            $db->execute_query($q, [$iduser, $idLibro]);
-
-
-            
-
-        } catch (mysqli_sql_exception $e) {
-            echo "Error al prestar el libro: " . $e->getMessage();
-        } finally {
-            $db->close();
-        }
-    }//devolver
-
-
-
-
-
-
-
-
     public function save($libro){
         $autores = $libro['autor']; //es un array pq son varios
         unset($libro['autor']);
