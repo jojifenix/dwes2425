@@ -1,0 +1,236 @@
+body,
+html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    background-color: #F4A261;
+    font-family: Arial, sans-serif;
+    color: #f1f1f1;
+}
+
+.formlogin,
+.formColsImgs {
+    background-color: #E63946;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    width: 30%;
+    height: 420px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formlogin:hover,
+.formColsImgs:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.formColsImgs {
+    background-color: #2A9D8F;
+}
+
+.tabla_imgs {
+    border: none;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabla_imgs table,
+.tabla_imgs td {
+    border: none;
+}
+
+.num_cols {
+    font-family: monospace;
+    font-size: 30px;
+    color: #f8f8f8;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.num_cols p {
+    text-align: center;
+}
+
+.num_cols select,
+.num_cols input {
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+
+}
+
+.divuserclave input {
+    padding: 7px;
+    margin: 5px;
+    width: 50%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+
+}
+
+.divuserclave {
+
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formlogin form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.diventrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.diventrar input {
+    width: 150px;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #ff5c5c;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+
+    margin-top: 20px;
+}
+
+.diventrar input:hover {
+    background-color: #ff3d3d;
+    transform: scale(1.05);
+}
+
+.divlogout {
+    background-color: #2A9D8F;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    width: 35%;
+    height: 420px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.divlogout:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.formColsImgs2 {
+    background-color: #E63946;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    width: 35%;
+    height: 420px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formColsImgs2:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.divlogout img {
+    transition: transform 0.2s ease;
+}
+.divlogout img:hover {
+    transform: scale(1.05);
+
+}
+
+.divlogout p {
+    font-size: 20px;
+    margin-top: 20px;
+    font-family: monospace;
+    margin-bottom: 30px;
+}
+
+.divlogout input {
+    margin: 10px;
+}
+
+.divlogout form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes error {
+    0% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(10deg);
+    }
+    20% {
+        transform: rotate(-10deg);
+    }
+    30% {
+        transform: rotate(10deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(-10deg);
+    }
+    70% {
+        transform: rotate(10deg);
+    }
+    80% {
+        transform: rotate(-10deg);
+    }
+    90% {
+        transform: rotate(10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.error {
+    font-family: monospace;
+    text-align: center;
+    font-size: 1.5em;
+    color: rgb(255, 0, 0);
+    animation: error 0.3s;
+}

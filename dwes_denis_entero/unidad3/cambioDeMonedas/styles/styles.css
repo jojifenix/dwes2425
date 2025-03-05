@@ -1,0 +1,52 @@
+form {
+    margin: 0 auto;
+    margin-bottom: 19px;
+    width: 250px;
+    padding: 10px;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    background: linear-gradient(to bottom, #e4f1fe, #8dc6ff);
+    box-shadow: 10px 10px 4px 0px #34495e;
+    /* Sombra a la derecha y a la izquierda */
+}
+
+input {
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+select {
+    background-color: lightgrey;
+
+}
+
+.pphp {
+    font-family: monospace;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.pform {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+
+.enviar {
+    margin-left: 90px;
+    margin-top: 10px;
+    width: 70px;
+    background-color: #22313f;
+    color: white;
+}
+
+.cant {
+    width: 100px;
+    margin-left: 70px;
+    margin-top: 0px;
+}
+
+.div2 {
+    margin-top: 10px;
+}

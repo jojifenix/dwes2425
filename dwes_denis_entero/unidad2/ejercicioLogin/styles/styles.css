@@ -1,0 +1,104 @@
+.idioma {
+    margin: 0 auto;
+    width: 320px;
+    margin-top: 10px;
+    background: linear-gradient(to top, #feffdf, #ffe79a);
+    box-shadow: 10px 10px 4px 0px #ef5a5a;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.login {
+    margin: 0 auto;
+    margin-bottom: 19px;
+    width: 320px;
+    padding: 10px;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    background: linear-gradient(to bottom, #feffdf, #ffe79a);
+    box-shadow: 10px 10px 4px 0px #ef5a5a;
+    height: 150px;
+}
+
+.diventrar {
+    width: 100%;
+    text-align: center;
+}
+
+.login .email,
+.login .pwd {
+    float: right;
+}
+
+.entrar {
+    background-color: #ef5a5a;
+    color: white;
+    width: 70px;
+}
+.error {
+    font-family: monospace;
+    text-align: center;
+    font-size: 1.5em;
+    color: red;
+    animation: error 0.3s;
+}
+.correcto {
+    font-family: monospace;
+    font-size: 20px;
+    text-align: center;
+}
+.exit {
+    position: relative; /* Añadimos position relativa */
+    display: inline-block; /* Para mantener su forma */
+    text-decoration: none;
+    border-radius: 5px;
+    /* transition: transform 5s; Hace más suave el movimiento */
+    width:200px;
+}
+.exit:hover {
+    animation: exit 10s;
+}
+@keyframes exit {
+    0% {
+        transform: translate(110px, 0); /* Comienza en su posición original */
+    }
+    100% {
+        transform: translate(0, 0); /* Se mueve 100px a la derecha */
+    }
+}
+@keyframes error {
+    0% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(10deg);
+    }
+    20% {
+        transform: rotate(-10deg);
+    }
+    30% {
+        transform: rotate(10deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(-10deg);
+    }
+    70% {
+        transform: rotate(10deg);
+    }
+    80% {
+        transform: rotate(-10deg);
+    }
+    90% {
+        transform: rotate(10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

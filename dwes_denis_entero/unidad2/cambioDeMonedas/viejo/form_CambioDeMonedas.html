@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario cambio de monedas</title>
+    <style>
+        form {
+            margin: 0 auto;
+            width: 200px;
+            padding: 10px;
+            border: 1px dashed black;
+            border-radius: 10px;
+            background-color: bisque;
+        }
+
+        input {
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        select {
+            background-color: lightgrey;
+
+        }
+
+        p {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 0px;
+        }
+
+        .enviar {
+            margin-left: 65px;
+            width: 70px;
+            background-color: lightgrey;
+        }
+
+        .cant {
+            width: 100px;
+            margin-left: 45px;
+            margin-top: 0px;
+        }
+        .div2{
+            margin-top: 10px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <form method="post" action="cambioDeMonedasV1.php">
+
+        <div class="div1">
+            <p>Cantidad a convertir </p><br />
+            <input class="cant" type="string" name="cant"> <br />
+        </div>
+
+        <div class="div2">
+            <p>Convertir a:
+                <select name="moneda">
+                    <option value="dolar">Dólar</option>
+                    <option value="libra">Libra</option>
+                    <option value="yen">Yen</option>
+                    <option value="leu">Leu</option>
+                </select>
+            </p><br />
+            <input class="enviar" type="submit" name="Cambiar" value="Cambiar">
+        </div>
+
+    </form>
+</body>
+
+</html>
